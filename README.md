@@ -1,4 +1,4 @@
-<p align="center"><b><u> Left Atrial Segmentation </u></b></p>
+<p align="center"><b><ins> Left Atrial Segmentation </ins></b></p>
 
 <br>
 
@@ -23,7 +23,7 @@
 
 <br>
 
-<u> Train the baseline model </u>
+<ins> Train the baseline model </ins>
 
 ```
 python baseline.py --root_dir ~/Drive/lasc18_dataset --batch_size 5 --max_epochs 100 --model vnetattn --lr 0.0001 --loss_criterion dice --gpu
@@ -31,7 +31,7 @@ python baseline.py --root_dir ~/Drive/lasc18_dataset --batch_size 5 --max_epochs
 
 <br>
 
-<u> Train the fine-tuning network </u>
+<ins> Train the fine-tuning network </ins>
 
 ```
 python train.py --root_dir ~/Drive/lasc18_dataset --batch_size 3 --locator_batch_size 4 --max_epochs 100 --model vnetattn --learning_rate 0.0001 --locator_learning_rate 0.0001 --loss_criterion dice --best_locator ./runs/weights/locator_vnetattn.pt --gpu
@@ -39,7 +39,7 @@ python train.py --root_dir ~/Drive/lasc18_dataset --batch_size 3 --locator_batch
 
 <br>
 
-<u> Test </u>
+<ins> Test </ins>
 
 ```
 python test.py --root_dir ~/Drive/lasc18_dataset --locator_path ./runs/weights/locator_vnetattn_best.pt --segmentor_path ./runs/weights/vnetattn_best.pt --gpu --output_dir ~/Drive/lasc18_dataset/test/preds/
@@ -47,7 +47,7 @@ python test.py --root_dir ~/Drive/lasc18_dataset --locator_path ./runs/weights/l
 
 <br>
 
-<u> Predict </u>
+<ins> Predict </ins>
 
 ```
 python predict.py --root_dir ~/Drive/lasc18_dataset/test --locator_path ./runs/weights/locator_vnetattn_best.pt --segmentor_path ./runs/weights/vnetattn_best.pt --gpu --output_dir ~/Drive/lasc18_dataset/test/preds
@@ -55,7 +55,7 @@ python predict.py --root_dir ~/Drive/lasc18_dataset/test --locator_path ./runs/w
 
 <br>
 
-<u> Detect </u>
+<ins> Detect </ins>
 
 ```
 python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgemri.nrrd --gt ~/Drive/lasc18_dataset/test/label/M2YZZ592ETSE09NBC233_laendo.nrrd --pred ~/Drive/lasc18_dataset/preds/prediction_M2YZZ592ETSE09NBC233_lgemri.nrrd
@@ -67,7 +67,7 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <br>
 
-<b><u>Dataset </u></b>
+<b><ins>Dataset </ins></b>
 
 - [2018 Left Atrial Segmentation Challenge](http://atriaseg2018.cardiacatlas.org/)
 - The original resolution of the dataset is (0.625 x 0.625 x 0.625)mm<sup>3</sup>.
@@ -78,7 +78,7 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <br>
 
-<b><u> Organization </u></b>
+<b><ins> Organization </ins></b>
 
 - Code Structure
 
@@ -111,16 +111,16 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <br>
 
-<b><u> Pipeline </u></b>
+<b><ins> Pipeline </ins></b>
 
 ![](assets/pipeline.png)
 
 <br>
 
-- <u>Pre-processing</u> <br>
+- <ins>Pre-processing</ins> <br>
 	- All image and mask pairs were zero-padded to have dimensions 96x640x640, so as to account for an even feature map progression through the neural network.
 	- Each input image is normalized using a sample-wise normalization, where each input is subtracted with the mean intensity value and divided by the deviation of the intensity.
-- <u>Data Augmentation</u> <br>
+- <ins>Data Augmentation</ins> <br>
 	- Data augmentation is a process to create new training data from existing training data. 
 	- Different augmentations were applied to the images in the training set.
 	- Random horizontal flip, random image rotation between -3 and 3 degrees, random image translation along either one or two axes, were the augmentation operations applied to the images in the training set to generate a total of 480 images from our original 70 images. 
@@ -132,7 +132,7 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <br>
 
-<b><u> Network </u></b>
+<ins><u> Network </ins></b>
 
 - The archutecture is a fully convolutional neural network based on VNet, but it is much lighter in terms of model parameters. 
 - The original VNet model consists of 33 million parameters, while the proposed network consists of about 8 million parameters. 
@@ -164,7 +164,7 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <br> 
 
-<b><u> Evaluation </u></b>
+<b><ins> Evaluation </ins></b>
 
 <br>
 
