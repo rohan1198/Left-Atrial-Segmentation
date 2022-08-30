@@ -132,7 +132,7 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <br>
 
-<ins><u> Network </ins></b>
+<ins><b> Network </b></ins>
 
 - The archutecture is a fully convolutional neural network based on VNet, but it is much lighter in terms of model parameters. 
 - The original VNet model consists of 33 million parameters, while the proposed network consists of about 8 million parameters. 
