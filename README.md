@@ -6,6 +6,14 @@
 
 <br>
 
+![](assets/prediction.gif)
+
+<br>
+
+---
+
+<br>
+
 - Left atrial segmentation is an important process used to evaluate the function and structure of the left atrium. 
 - Late Gadolinium-enhanced magnetic resonance images (LGE-MRI) are often used for the visualization of cardiac structures, but direct segmentation of the region of interest is challenging due to the depreciated contrast in these images.
 
@@ -15,42 +23,43 @@
 
 <br>
 
-<u>Train the baseline model</u>
+<u> Train the baseline model </u>
+
 ```
 python baseline.py --root_dir ~/Drive/lasc18_dataset --batch_size 5 --max_epochs 100 --model vnetattn --lr 0.0001 --loss_criterion dice --gpu
 ```
 
 <br>
 
-<u>Train the fine-tuning network</u>
+<u> Train the fine-tuning network </u>
+
 ```
 python train.py --root_dir ~/Drive/lasc18_dataset --batch_size 3 --locator_batch_size 4 --max_epochs 100 --model vnetattn --learning_rate 0.0001 --locator_learning_rate 0.0001 --loss_criterion dice --best_locator ./runs/weights/locator_vnetattn.pt --gpu
 ```
 
 <br>
 
-<u>Test</u>
+<u> Test </u>
+
 ```
 python test.py --root_dir ~/Drive/lasc18_dataset --locator_path ./runs/weights/locator_vnetattn_best.pt --segmentor_path ./runs/weights/vnetattn_best.pt --gpu --output_dir ~/Drive/lasc18_dataset/test/preds/
 ```
 
 <br>
 
-<u>Predict</u>
+<u> Predict </u>
+
 ```
 python predict.py --root_dir ~/Drive/lasc18_dataset/test --locator_path ./runs/weights/locator_vnetattn_best.pt --segmentor_path ./runs/weights/vnetattn_best.pt --gpu --output_dir ~/Drive/lasc18_dataset/test/preds
 ```
 
 <br>
 
-<u>Detect</u>
+<u> Detect </u>
+
 ```
 python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgemri.nrrd --gt ~/Drive/lasc18_dataset/test/label/M2YZZ592ETSE09NBC233_laendo.nrrd --pred ~/Drive/lasc18_dataset/preds/prediction_M2YZZ592ETSE09NBC233_lgemri.nrrd
 ```
-
-<br>
-
-![](assets/prediction.gif)
 
 <br>
 
@@ -82,7 +91,7 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
     - lib/data.py $\rightarrow$ Processes and Loads the data.
     - lib/losses.py $\rightarrow$ Different loss functions to optimize the neural network to.
     - lib/metrics.py $\rightarrow$ Metrics to measure the performance of the neural network.
-    - lib/utils.py $\rightarrow$ Contains various utility functions
+    - lib/utils.py $\rightarrow$ Contains various utility functions.
 
 ![](assets/code_org.png)
 
@@ -125,7 +134,10 @@ python detect.py --raw ~/Drive/lasc18_dataset/test/raw/M2YZZ592ETSE09NBC233_lgem
 
 <b><u> Network </u></b>
 
-A novel architecture is proposed for the automated segmentation of the left atrium. It is a fully convolutional neural network based on VNet, but it is much lighter in terms of model parameters. The original VNet model consists of 33 million parameters, while the proposed network consists of about 8 million parameters. The reduction in parameters can be achieved due to the BAM’s located at each bottleneck. The left part of the network is the encoder path, which extracts the features in a local-to-global sense, while the right part of the network is the decoder path, which outputs a mask with binary values for background and foreground. A high-level overview of the network can be seen in Figure.
+- The archutecture is a fully convolutional neural network based on VNet, but it is much lighter in terms of model parameters. 
+- The original VNet model consists of 33 million parameters, while the proposed network consists of about 8 million parameters. 
+- The reduction in parameters can be achieved due to the BAM’s located at each bottleneck. 
+- The left part of the network is the encoder path, which extracts the features in a local-to-global sense, while the right part of the network is the decoder path, which outputs a mask with binary values for background and foreground. A high-level overview of the network can be seen in the figure below.
 
 <br>
 
@@ -133,8 +145,13 @@ A novel architecture is proposed for the automated segmentation of the left atri
 
 <br>
 
-Convolutions at each stage use 3D convolutional kernels with kernel size 5x5x5. As the data propagates through the downsampling path, the resolution is reduced using convolutional kernels of size 2x2x2. The downsampling portion of the network increases the receptive field of the features computed in the subsequent layers. A deconvolution operation is performed at each stage of the upsampling in order to increase the size of the inputs. This is followed by 3D convolution operations with the same parameters as in the case of downsampling. 
-As seen from Figure 2, the attention module is added to each bottleneck. The channel attention and spatial attention are calculated independently at two separate branches. The final attention map is then computed by taking the sigmoid of the sum of the outputs of the channel and spatial branch.
+- Convolutions at each stage use 3D convolutional kernels with kernel size 5x5x5. 
+- As the data propagates through the downsampling path, the resolution is reduced using convolutional kernels of size 2x2x2. 
+- The downsampling portion of the network increases the receptive field of the features computed in the subsequent layers. 
+- A deconvolution operation is performed at each stage of the upsampling in order to increase the size of the inputs. 
+- This is followed by 3D convolution operations with the same parameters as in the case of downsampling. 
+- The channel attention and spatial attention are calculated independently at two separate branches. 
+- The final attention map is then computed by taking the sigmoid of the sum of the outputs of the channel and spatial branch.
 
 <br>
 
