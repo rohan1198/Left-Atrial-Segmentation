@@ -10,6 +10,11 @@
 
 <br>
 
+- Left: Ground truth
+- Right: Prediction
+
+<br>
+
 ---
 
 <br>
