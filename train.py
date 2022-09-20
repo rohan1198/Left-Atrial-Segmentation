@@ -234,8 +234,6 @@ if __name__ == '__main__':
     else:
         loss_function = IoULoss()
 
-    alpha = 1
-
     net = VNetAttention(in_channels=1, classes=1)
     logger.info(f'Initialised segmentation model.')
 
@@ -257,7 +255,6 @@ if __name__ == '__main__':
         max_epochs = int(checkpoint['max_epochs'])
         optimizer.load_state_dict(checkpoint['optimizer_state'])
         net.load_state_dict(checkpoint['model_state'])
-        alpha = int(checkpoint['alpha'])
         best_validation_score = float(checkpoint['best_validation_score'])
         training_error = checkpoint['training_error']
         validation_error = checkpoint['validation_error']
@@ -556,7 +553,6 @@ if __name__ == '__main__':
                      'max_epochs': max_epochs,
                      'optimizer_state': optimizer.state_dict(),
                      'model_state': model_state,
-                     'alpha': alpha,
                      'best_validation_score': best_validation_score,
                      'training_error': training_error,
                      'validation_error': valid_error,
