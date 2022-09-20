@@ -114,7 +114,6 @@ if __name__ == '__main__':
     device = torch.device("cuda" if use_cuda else "cpu")
     factor = args.reduce
     patience = args.patience
-    alpha = 1
 
     locator_loss_function = Dice()
 
